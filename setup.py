@@ -2,6 +2,12 @@ import os
 import subprocess
 import sys
 from setuptools import setup, find_packages
+from setuptools.dist import Distribution
+# from setuptools.command.install import install
+
+class BinaryDistribution(Distribution):
+    def has_ext_modules(self):
+        return True
 
 def get_ci_vars(filepath):
     ci_vars = {}
@@ -25,7 +31,7 @@ ci_vars = get_ci_vars(filepath)
 ###
 get_version = (
     'bash -c "source ./scripts/common-functions.sh && get_wheel_version \\"{}\\" \\"{}\\" \\"{}\\" \\"{}\\""'
-).format(ci_vars["OS_RELEASE"], ci_vars["OPENFHE_TAG"], ci_vars["WHEEL_MINOR_VERSION"], ci_vars["WHEEL_TEST_VERSION"])
+).format(ci_vars["OS_RELEASE"], ci_vars["OPENFHE_NUMPY_TAG"], ci_vars["WHEEL_MINOR_VERSION"], ci_vars["WHEEL_TEST_VERSION"])
 
 get_long_descr = (
     'bash -c "source ./scripts/common-functions.sh && get_long_description \\"{}\\" \\"{}\\""'
@@ -33,10 +39,14 @@ get_long_descr = (
 
 ###################################################################################
 
+version=subprocess.run(get_version, shell=True, capture_output=True, text=True).stdout.strip()
+long_description=subprocess.run(get_long_descr, shell=True, capture_output=True, text=True).stdout.strip()
 setup(
-    name='openfhe',
-    version=subprocess.run(get_version, shell=True, capture_output=True, text=True).stdout,
+    name='openfhe-numpy',
+    version=version,
     description='Numpy Matrix extention for OpenFHE C++ library.',
+    long_description=long_description,
+    long_description_content_type='text/markdown',  # format
     author='OpenFHE Team',
     author_email='contact@openfhe.org',
     url='https://github.com/openfheorg/openfhe-numpy',
@@ -45,15 +55,14 @@ setup(
     package_dir={'': 'build/wheel-root'},
     include_package_data=True,
     package_data={
-        'openfhe': ['lib/*.so', 'lib/*.so.1', '*.so', 'build-config.txt'],
+        'openfhe_numpy.openfhe': ['lib/*.so', 'lib/*.so.1', '*.so'],
+        'openfhe_numpy': ['*.so', 'build-config.txt'],
     },
     python_requires=f">={sys.version_info.major}.{sys.version_info.minor}",
+    distclass=BinaryDistribution,
     classifiers=[
         "Operating System :: POSIX :: Linux",
         # add other classifiers as needed
     ],
-    long_description=subprocess.run(get_long_descr, shell=True, capture_output=True, text=True).stdout,
-    long_description_content_type='text/markdown',  # format
-
 )
 

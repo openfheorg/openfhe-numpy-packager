@@ -41,16 +41,25 @@ get_install_path()
 
   echo "${INSTALL_PATH}"
 }
+get_openfhe_install_path()
+{
+  ROOT=${1}
+
+  INSTALL_DIR="loc-install"
+  OPENFHE_INSTALL_PATH="$ROOT/$INSTALL_DIR/openfhe"
+
+  echo "${OPENFHE_INSTALL_PATH}"
+}
 
 # ATTN: get_wheel_version MUST NOT print anything else, but ${VERSION} !!!
 get_wheel_version()
 {
   OS_RELEASE=${1}
-  OPENFHE_TAG=${2}
+  OPENFHE_NUMPY_TAG=${2}
   WHEEL_MINOR_VERSION=${3}
   WHEEL_TEST_VERSION=${4}
 
-  VERSION="${OPENFHE_TAG#v}.${WHEEL_MINOR_VERSION}.${OS_RELEASE}"
+  VERSION="${OPENFHE_NUMPY_TAG#v}.${WHEEL_MINOR_VERSION}.${OS_RELEASE}"
   if [ -n "${WHEEL_TEST_VERSION}" ]; then
     VERSION="${VERSION}.dev${WHEEL_TEST_VERSION}"
   fi
@@ -87,8 +96,24 @@ get_cmake_default_args()
   C_COMPILER=$(get_compiler_version "gcc")
 
   INSTALL_PATH=$(get_install_path ${ROOT})
+  OPENFHE_INSTALL_PATH=$(get_openfhe_install_path ${ROOT})
 
-  CMAKE_DEFAULT_ARGS="-DCMAKE_INSTALL_PREFIX=$INSTALL_PATH -DCMAKE_PREFIX_PATH=$INSTALL_PATH"
+  CMAKE_DEFAULT_ARGS="-DCMAKE_INSTALL_PREFIX=$INSTALL_PATH -DCMAKE_PREFIX_PATH=$OPENFHE_INSTALL_PATH"
+  CMAKE_DEFAULT_ARGS=${CMAKE_DEFAULT_ARGS}" -DCMAKE_CXX_COMPILER=${CXX_COMPILER} -DCMAKE_C_COMPILER=${C_COMPILER}"
+
+  echo "${CMAKE_DEFAULT_ARGS}"
+}
+
+get_openfhe_cmake_default_args()
+{
+  ROOT=${1}
+  # get compiler version
+  CXX_COMPILER=$(get_compiler_version "g++")
+  C_COMPILER=$(get_compiler_version "gcc")
+
+  OPENFHE_INSTALL_PATH=$(get_openfhe_install_path ${ROOT})
+
+  CMAKE_DEFAULT_ARGS="-DCMAKE_INSTALL_PREFIX=$OPENFHE_INSTALL_PATH -DCMAKE_PREFIX_PATH=$OPENFHE_INSTALL_PATH"
   CMAKE_DEFAULT_ARGS=${CMAKE_DEFAULT_ARGS}" -DCMAKE_CXX_COMPILER=${CXX_COMPILER} -DCMAKE_C_COMPILER=${C_COMPILER}"
 
   echo "${CMAKE_DEFAULT_ARGS}"
