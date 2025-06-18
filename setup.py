@@ -55,14 +55,18 @@ setup(
     package_dir={'': 'build/wheel-root'},
     include_package_data=True,
     package_data={
-        'openfhe_numpy.openfhe': ['lib/*.so', 'lib/*.so.1', '*.so'],
         'openfhe_numpy': ['*.so', 'build-config.txt'],
     },
+    install_requires=[
+        'openfhe>=1.3.0,<1.4.0',
+        'numpy>=1.24'
+    ],
     python_requires=f">={sys.version_info.major}.{sys.version_info.minor}",
     distclass=BinaryDistribution,
     classifiers=[
         "Operating System :: POSIX :: Linux",
         # add other classifiers as needed
     ],
+    zip_safe=False,
 )
 

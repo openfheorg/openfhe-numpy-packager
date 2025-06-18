@@ -14,7 +14,7 @@ separator
 echo "Activated virtual environment: \"$(basename "$VIRTUAL_ENV")\""
 separator
 
-# build openfhe-development, openfhe-python and openfhe-numpy
+# build openfhe-numpy
 ./scripts/build-binaries.sh
 
 # build the wheel
