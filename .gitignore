@@ -1,3 +1,8 @@
+# Ignore everything in these directories
+build/
+env_for_openfhe_*/
+wheel_*/
+
 # Prerequisites
 *.d
 
@@ -30,6 +35,3 @@
 *.exe
 *.out
 *.app
-
-# virtual environment
-env_for_openfhe_numpy_wheel/

@@ -4,10 +4,11 @@ FROM ubuntu:20.04
 # Set environment variable to disable interactive prompts during package installs
 ENV DEBIAN_FRONTEND=noninteractive
 
-
-# tag for the packager
-ARG PACKAGER_TAG
-ENV OPENFHE_NUMPY_PACKAGER_TAG=${PACKAGER_TAG}
+# ci-vars.sh overrides
+ARG OPENFHE_NUMPY_TAG_ARG
+ARG WHEEL_MINOR_VERSION_ARG
+ARG WHEEL_TEST_VERSION_ARG
+ARG PARALELLISM_ARG
 
 # Update package lists and install essential utilities (optional)
 RUN apt-get update && apt-get install -y \
@@ -30,17 +31,14 @@ RUN apt-get update && apt-get install -y \
 WORKDIR /root
 
 
-# clone openfhe-numpy-packager to /root and switch to the correct version of it
-RUN git clone https://github.com/openfheorg/openfhe-numpy-packager.git /root/openfhe-numpy-packager && \
-    cd /root/openfhe-numpy-packager && \
-    git checkout ${OPENFHE_NUMPY_PACKAGER_TAG}
+# clone openfhe-numpy-packager to /root
+RUN git clone https://github.com/openfheorg/openfhe-numpy-packager.git
 
 # Set the default command to run when the container starts
 ### CMD ["/bin/bash"]
 
 # prepare to build the wheel
 WORKDIR /root/openfhe-numpy-packager
-RUN cat /root/openfhe-numpy-packager/ci-vars.sh
 
 # for testing purposes:
 # # # RUN git fetch origin; git pull origin; git status
@@ -49,6 +47,11 @@ RUN cat /root/openfhe-numpy-packager/ci-vars.sh
 # override ci-vars.sh with the correct os name and release
 RUN sed -i '/^OS_NAME=/c\OS_NAME=Ubuntu' /root/openfhe-numpy-packager/ci-vars.sh
 RUN sed -i '/^OS_RELEASE=/c\OS_RELEASE=20.04' /root/openfhe-numpy-packager/ci-vars.sh
+# other ci-vars.sh overrides
+RUN sed -i '/^OPENFHE_NUMPY_TAG=/c\OPENFHE_NUMPY_TAG='${OPENFHE_NUMPY_TAG_ARG} /root/openfhe-numpy-packager/ci-vars.sh &&       \
+    sed -i '/^WHEEL_MINOR_VERSION=/c\WHEEL_MINOR_VERSION='${WHEEL_MINOR_VERSION_ARG} /root/openfhe-numpy-packager/ci-vars.sh && \
+    sed -i '/^WHEEL_TEST_VERSION=/c\WHEEL_TEST_VERSION='${WHEEL_TEST_VERSION_ARG} /root/openfhe-numpy-packager/ci-vars.sh &&    \
+    sed -i '/^PARALELLISM=/c\PARALELLISM='${PARALELLISM_ARG} /root/openfhe-numpy-packager/ci-vars.sh
 
 # build the wheel
 RUN /root/openfhe-numpy-packager/build_openfhe_numpy_wheel.sh
