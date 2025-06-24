@@ -4,6 +4,11 @@ FROM ubuntu:20.04
 # Set environment variable to disable interactive prompts during package installs
 ENV DEBIAN_FRONTEND=noninteractive
 
+
+# tag for the packager
+ARG PACKAGER_TAG
+ENV OPENFHE_NUMPY_PACKAGER_TAG=${PACKAGER_TAG}
+
 # Update package lists and install essential utilities (optional)
 RUN apt-get update && apt-get install -y \
         git \
@@ -24,14 +29,18 @@ RUN apt-get update && apt-get install -y \
 # Set a working directory inside the container (optional)
 WORKDIR /root
 
-# clone openfhe-numpy-packager to /root
-RUN git clone https://github.com/openfheorg/openfhe-numpy-packager.git
+
+# clone openfhe-numpy-packager to /root and switch to the correct version of it
+RUN git clone https://github.com/openfheorg/openfhe-numpy-packager.git /root/openfhe-numpy-packager && \
+    cd /root/openfhe-numpy-packager && \
+    git checkout ${OPENFHE_NUMPY_PACKAGER_TAG}
 
 # Set the default command to run when the container starts
 ### CMD ["/bin/bash"]
 
 # prepare to build the wheel
 WORKDIR /root/openfhe-numpy-packager
+RUN cat /root/openfhe-numpy-packager/ci-vars.sh
 
 # for testing purposes:
 # # # RUN git fetch origin; git pull origin; git status
