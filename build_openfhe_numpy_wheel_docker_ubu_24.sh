@@ -16,6 +16,8 @@ echo "===== Building ${CONTAINER_NAME} from ${DOCKER_FILE}"
 docker build                                                   \
     -f docker_files/${DOCKER_FILE}                             \
     -t ${CONTAINER_NAME}                                       \
+    --build-arg OPENFHE_TAG_ARG=${OPENFHE_TAG}                 \
+    --build-arg OPENFHE_PYTHON_TAG_ARG=${OPENFHE_PYTHON_TAG}   \
     --build-arg OPENFHE_NUMPY_TAG_ARG=${OPENFHE_NUMPY_TAG}     \
     --build-arg WHEEL_MINOR_VERSION_ARG=${WHEEL_MINOR_VERSION} \
     --build-arg WHEEL_TEST_VERSION_ARG=${WHEEL_TEST_VERSION}   \
