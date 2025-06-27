@@ -78,22 +78,6 @@ get_compiler_version()
   echo "${COMPILER}-${compiler_version}"
 }
 
-# ATTN: get_cmake_default_args MUST NOT print anything else, but ${CMAKE_DEFAULT_ARGS} !!!
-get_cmake_default_args()
-{
-  ROOT=${1}
-  # get compiler version
-  CXX_COMPILER=$(get_compiler_version "g++")
-  C_COMPILER=$(get_compiler_version "gcc")
-
-  INSTALL_PATH=$(get_install_path ${ROOT})
-
-  CMAKE_DEFAULT_ARGS="-DCMAKE_INSTALL_PREFIX=$INSTALL_PATH"
-  CMAKE_DEFAULT_ARGS=${CMAKE_DEFAULT_ARGS}" -DCMAKE_CXX_COMPILER=${CXX_COMPILER} -DCMAKE_C_COMPILER=${C_COMPILER}"
-
-  echo "${CMAKE_DEFAULT_ARGS}"
-}
-
 build_install_tag_with_args()
 {
   DIR=${1}

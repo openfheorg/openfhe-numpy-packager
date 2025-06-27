@@ -26,7 +26,7 @@ mkdir -p ${ONP_ROOT}
 separator
 
 echo "OPENFHE-NUMPY module"
-INSTALL_PATH=$(get_install_path ${BUILD_DIR})
+INSTALL_PATH=$(get_install_path ${BUILD_DIR})/openfhe-numpy
 cp ${INSTALL_PATH}/openfhe_numpy.*.so ${ONP_ROOT}
 # add ci-vars.sh as build-config.txt to the wheel for reference
 cp ${ROOT}/ci-vars.sh ${ONP_ROOT}/build-config.txt
