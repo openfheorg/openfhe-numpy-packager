@@ -1,23 +1,23 @@
-# This repo is a collection of scripts to build a python wheel for openfhe-numpy.
+# This repository contains scripts to build a python wheel for for openfhe-numpy.
 
 
 ## How to build a new wheel
 
 ### Docker build
 
-1. Adjust repo versions/settings in [ci-vars.sh](https://github.com/openfheorg/openfhe-numpy-packager/blob/main/ci-vars.sh) as needed. The changes will be grabbed by the build script.
-2. Run [build_openfhe_numpy_wheel_docker_ubu_24.sh](https://github.com/openfheorg/openfhe-numpy-packager/blob/main/build_openfhe_numpy_wheel_docker_ubu_24.sh) for Ubuntu 24.04 or the build script for your operaing system (if available)  
-   - The script builds a new docker and the wheel in it.
-   - When the wheel is ready, the script creates a new directory (`wheel_<operating system name>`. ex. "wheel_ubuntu_24.04" for Ubuntu 24.04) on your local machine and copies the *.whl and *.tar.gz files from the docker to that directory.
+1. Edit [ci-vars.sh](https://github.com/openfheorg/openfhe-numpy-packager/blob/main/ci-vars.sh) to update repo versions or build settings as needed. These changes will be picked up automatically by the build script.
+2. Run [build_openfhe_numpy_wheel_docker_ubu_24.sh](https://github.com/openfheorg/openfhe-numpy-packager/blob/main/build_openfhe_numpy_wheel_docker_ubu_24.sh) for Ubuntu 24.04 or use the appropriate script for your operating system (if available).  
+   - The script builds a new docker image and generate the wheel inside it.
+   - Once the build is complete, the script will create a directory named `wheel_<os_name>` (e.g., `wheel_ubuntu_24.04` for Ubuntu 24.04) on your local machine and copy the generated `*.whl` and `*.tar.gz` files from the docker container to that directory.
 
 ### Manual build
 
 1. Prerequisites:  
-   Before building, make sure you have installed all dependencies **(do not clone these repos)**:
-   - For [openfhe-development](https://github.com/openfheorg/openfhe-development).
-   - For [openfhe-python](https://pybind11.readthedocs.io/en/stable/installing.html) you need to have only 2 packages installed: python3 and python3-pip.
-2. Build:  
-   - Adjust repo versions/settings in [ci-vars.sh](https://github.com/openfheorg/openfhe-numpy-packager/blob/main/ci-vars.sh) as needed. The changes will be grabbed by the build script.
+   Before building, make sure the following dependencies are installed (**do not clone the repos manually**):
+   - For [openfhe-development](https://github.com/openfheorg/openfhe-development): ensure all its dependencies are installed. 
+   - For [openfhe-python](https://github.com/openfheorg/openfhe-python): only `python3` and `python3-pip` are required.
+2. Build steps:  
+   - Adjust the repo versions/settings in [ci-vars.sh](https://github.com/openfheorg/openfhe-numpy-packager/blob/main/ci-vars.sh) as needed.
    - Run [build_openfhe_numpy_wheel.sh](https://github.com/openfheorg/openfhe-numpy-packager/blob/main/build_openfhe_numpy_wheel.sh).
-   - The package built for distribution will be available in **./build/dist**.
-   - The wheel includes a file **openfhe/build-config.txt** with all settings from ci-vars.sh used to build the wheel. 
+   - The built distribution package will be available in the `./build/dist` directory.
+   - The resulting wheel includes an `openfhe_numpy/build-config.txt` file with all settings used from ci-vars.sh. 
