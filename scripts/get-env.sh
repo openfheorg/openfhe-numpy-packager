@@ -10,7 +10,7 @@ if [ ! -d ${VENV_DIR} ]; then
     python3 -m pip install "pybind11[global]"
     # pip install pybind11-stubgen
     python3 -m pip install --upgrade pip setuptools wheel build
-    python3 -m pip install twine
+    python3 -m pip install patchelf auditwheel twine
 else
     # source ${VENV_DIR}/bin/activate
     . ${VENV_DIR}/bin/activate

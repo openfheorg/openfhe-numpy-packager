@@ -58,9 +58,10 @@ setup(
         'openfhe_numpy': ['*.so', 'build-config.txt'],
     },
     install_requires=[
-        #'openfhe==1.3.0.0.1.0.24.4.dev2',
-        #'openfhe~=1.3.0.0.1.0.24.4.dev2',
-        'openfhe>=1.3.0,<1.3.2',
+        # 'openfhe==1.3.0.0.1.0.24.4.dev2',
+        # 'openfhe~=1.3.0.0.1.0.24.4.dev2',
+        # 'openfhe>=1.3.0,<1.3.2',
+        'openfhe==1.3.1.0',
         'numpy>=1.24'
     ],
     python_requires=f">={sys.version_info.major}.{sys.version_info.minor}",

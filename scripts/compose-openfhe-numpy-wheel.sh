@@ -37,7 +37,15 @@ cp -r ${INSTALL_PATH}/tensor/ ${ONP_ROOT}
 cp -r ${INSTALL_PATH}/utils/ ${ONP_ROOT}
 
 cd ${ROOT}
-python3 -m build --wheel --outdir ${BUILD_DIR}/dist
+python3 -m build --wheel --outdir ${BUILD_DIR}/dist_temp
+# in order to repair the wheel, auditwheel has to have access to libOPENFHE*.so. So, we locate the libs and export LD_LIBRARY_PATH.
+# The libs should be in the same directory
+OPENFHE_LIBDIR="$(dirname "$(readlink -f "$(find "${BUILD_DIR}" -type f -name 'libOPENFHEpke.so*' -o -name 'libOPENFHEcore.so*' -o -name 'libOPENFHEbinfhe.so*'|head -n1)")")"
+echo "------------------ $OPENFHE_LIBDIR"
+ls -l "$OPENFHE_LIBDIR"/libOPENFHE*.so*
+echo "------------------ $OPENFHE_LIBDIR"
+export LD_LIBRARY_PATH="$OPENFHE_LIBDIR:$LD_LIBRARY_PATH"
+auditwheel repair ${BUILD_DIR}/dist_temp/*.whl -w ${BUILD_DIR}/dist
 
 echo
 echo "Done."
