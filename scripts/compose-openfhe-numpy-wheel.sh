@@ -28,6 +28,13 @@ separator
 echo "OPENFHE-NUMPY module"
 INSTALL_PATH=$(get_install_path ${BUILD_DIR})/openfhe-numpy
 cp ${INSTALL_PATH}/openfhe_numpy.*.so ${ONP_ROOT}
+
+# ensure that openfhe-numpy.so finds OpenFHE after openfhe-numpy gets installed
+patchelf --set-rpath '$ORIGIN:$ORIGIN/../openfhe/lib' ${ONP_ROOT}/openfhe_numpy*.so || true
+# echo "------------------ patchelf --print-rpath"
+# patchelf --print-rpath ${ONP_ROOT}/openfhe_numpy*.so
+# echo "------------------ patchelf --print-rpath"
+
 # add ci-vars.sh as build-config.txt to the wheel for reference
 cp ${ROOT}/ci-vars.sh ${ONP_ROOT}/build-config.txt
 chmod 644 ${ONP_ROOT}/build-config.txt
@@ -41,11 +48,16 @@ python3 -m build --wheel --outdir ${BUILD_DIR}/dist_temp
 # in order to repair the wheel, auditwheel has to have access to libOPENFHE*.so. So, we locate the libs and export LD_LIBRARY_PATH.
 # The libs should be in the same directory
 OPENFHE_LIBDIR="$(dirname "$(readlink -f "$(find "${BUILD_DIR}" -type f -name 'libOPENFHEpke.so*' -o -name 'libOPENFHEcore.so*' -o -name 'libOPENFHEbinfhe.so*'|head -n1)")")"
-echo "------------------ $OPENFHE_LIBDIR"
-ls -l "$OPENFHE_LIBDIR"/libOPENFHE*.so*
-echo "------------------ $OPENFHE_LIBDIR"
+# echo "------------------ $OPENFHE_LIBDIR"
+# ls -l "$OPENFHE_LIBDIR"/libOPENFHE*.so*
+# echo "------------------ $OPENFHE_LIBDIR"
 export LD_LIBRARY_PATH="$OPENFHE_LIBDIR:$LD_LIBRARY_PATH"
-auditwheel repair ${BUILD_DIR}/dist_temp/*.whl -w ${BUILD_DIR}/dist
+# auditwheel repair ${BUILD_DIR}/dist_temp/*.whl -w ${BUILD_DIR}/dist
+
+# repair the wheel, but exclude all OpenFHE libs (and libgomp) so they are NOT vendored
+auditwheel repair ${BUILD_DIR}/dist_temp/*.whl \
+           --exclude libOPENFHEcore.so.1 --exclude libOPENFHEpke.so.1 --exclude libOPENFHEbinfhe.so.1 --exclude libgomp.so \
+           -w ${BUILD_DIR}/dist
 
 echo
 echo "Done."
