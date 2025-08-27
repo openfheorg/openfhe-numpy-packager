@@ -33,8 +33,8 @@ RUN apt-get update && apt-get install -y \
 WORKDIR /root
 
 
-# clone openfhe-numpy-packager to /root
-RUN git clone https://github.com/openfheorg/openfhe-numpy-packager.git
+# copy local openfhe-numpy-packager to /root
+COPY . /root/openfhe-numpy-packager
 
 # Set the default command to run when the container starts
 ### CMD ["/bin/bash"]
@@ -59,4 +59,3 @@ RUN sed -i '/^OPENFHE_TAG=/c\OPENFHE_TAG='${OPENFHE_TAG_ARG} /root/openfhe-numpy
 
 # build the wheel
 RUN /root/openfhe-numpy-packager/build_openfhe_numpy_wheel.sh
-
