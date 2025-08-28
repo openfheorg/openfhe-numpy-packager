@@ -13,7 +13,7 @@ DOCKER_FILE=openfhe-numpy-build-${OS_NAME}-${OS_RELEASE}.Dockerfile
 echo "===== Building ${CONTAINER_NAME} from ${DOCKER_FILE}"
 
 # build arguments are to override ci-vars.sh with values from your local ci-vars.sh
-docker build                                                   \
+docker build --no-cache \
     -f docker_files/${DOCKER_FILE}                             \
     -t ${CONTAINER_NAME}                                       \
     --build-arg OPENFHE_TAG_ARG=${OPENFHE_TAG}                 \
