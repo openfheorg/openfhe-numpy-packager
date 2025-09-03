@@ -34,7 +34,7 @@ WORKDIR /root
 
 
 # clone openfhe-numpy-packager to /root
-RUN git clone https://github.com/openfheorg/openfhe-numpy-packager.git
+COPY . /root/openfhe-numpy-packager
 
 # Set the default command to run when the container starts
 ### CMD ["/bin/bash"]

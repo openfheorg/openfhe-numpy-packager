@@ -31,6 +31,7 @@ cp ${INSTALL_PATH}/openfhe_numpy.*.so ${ONP_ROOT}
 
 # ensure that openfhe-numpy.so finds OpenFHE after openfhe-numpy gets installed
 patchelf --set-rpath '$ORIGIN:$ORIGIN/../openfhe/lib' ${ONP_ROOT}/openfhe_numpy*.so || true
+# patchelf --set-rpath '$ORIGIN' ${ONP_ROOT}/openfhe_numpy*.so || true
 # echo "------------------ patchelf --print-rpath"
 # patchelf --print-rpath ${ONP_ROOT}/openfhe_numpy*.so
 # echo "------------------ patchelf --print-rpath"
@@ -55,7 +56,9 @@ export LD_LIBRARY_PATH="$OPENFHE_LIBDIR:$LD_LIBRARY_PATH"
 # auditwheel repair ${BUILD_DIR}/dist_temp/*.whl -w ${BUILD_DIR}/dist
 
 # repair the wheel, but exclude all OpenFHE libs (and libgomp) so they are NOT vendored
-auditwheel repair ${BUILD_DIR}/dist_temp/*.whl \
+# there is an additional auditwheel option required for Ubuntu 20
+ADDL_OPTION=$(if [ "$OS_NAME" = "Ubuntu" ] && [ "$OS_RELEASE" = "20.04" ]; then echo "--plat manylinux_2_31_x86_64"; else echo ""; fi)
+auditwheel repair $ADDL_OPTION ${BUILD_DIR}/dist_temp/*.whl \
            --exclude libOPENFHEcore.so.1 --exclude libOPENFHEpke.so.1 --exclude libOPENFHEbinfhe.so.1 --exclude libgomp.so \
            -w ${BUILD_DIR}/dist
 
