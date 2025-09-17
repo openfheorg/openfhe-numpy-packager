@@ -55,9 +55,7 @@ export LD_LIBRARY_PATH="$OPENFHE_LIBDIR:$LD_LIBRARY_PATH"
 # auditwheel repair ${BUILD_DIR}/dist_temp/*.whl -w ${BUILD_DIR}/dist
 
 # repair the wheel, but exclude all OpenFHE libs (and libgomp) so they are NOT vendored
-# there is an additional auditwheel option required for Ubuntu 20
-ADDL_OPTION=$(if [ "$OS_NAME" = "Ubuntu" ] && [ "$OS_RELEASE" = "20.04" ]; then echo "--plat manylinux_2_31_x86_64"; else echo ""; fi)
-auditwheel repair $ADDL_OPTION ${BUILD_DIR}/dist_temp/*.whl \
+auditwheel repair ${BUILD_DIR}/dist_temp/*.whl \
            --exclude libOPENFHEcore.so.1 --exclude libOPENFHEpke.so.1 --exclude libOPENFHEbinfhe.so.1 --exclude libgomp.so \
            -w ${BUILD_DIR}/dist
 
