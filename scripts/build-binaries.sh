@@ -9,9 +9,7 @@ echo "${0}: BUILD_DIR - ${BUILD_DIR}"
 
 # prepare some common args:
 # get compiler version
-CXX_COMPILER=$(get_compiler_version "g++")
-C_COMPILER=$(get_compiler_version "gcc")
-CMAKE_DEFAULT_ARGS="-DCMAKE_CXX_COMPILER=${CXX_COMPILER} -DCMAKE_C_COMPILER=${C_COMPILER}"
+CMAKE_DEFAULT_ARGS="${ADDL_CMAKE_FLAGS}"
 
 INSTALL_PATH=$(get_install_path ${BUILD_DIR})
 

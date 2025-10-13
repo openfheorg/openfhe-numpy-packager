@@ -32,6 +32,7 @@ docker build                                                     \
     --build-arg OPENFHE_NUMPY_TAG_ARG="${OPENFHE_NUMPY_TAG}"     \
     --build-arg WHEEL_MINOR_VERSION_ARG="${WHEEL_MINOR_VERSION}" \
     --build-arg WHEEL_TEST_VERSION_ARG="${WHEEL_TEST_VERSION}"   \
+    --build-arg ADDL_CMAKE_FLAGS_ARG="${ADDL_CMAKE_FLAGS}"       \
     --build-arg PARALELLISM_ARG="${PARALELLISM}"                 \
     . --progress=plain || abort "${CONTAINER_NAME} failed"
 

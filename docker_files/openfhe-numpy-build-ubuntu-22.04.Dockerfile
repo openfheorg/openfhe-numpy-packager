@@ -10,6 +10,7 @@ ARG OPENFHE_PYTHON_TAG_ARG
 ARG OPENFHE_NUMPY_TAG_ARG
 ARG WHEEL_MINOR_VERSION_ARG
 ARG WHEEL_TEST_VERSION_ARG
+ARG ADDL_CMAKE_FLAGS_ARG
 ARG PARALELLISM_ARG
 
 # Update package lists and install essential utilities (optional)
@@ -50,11 +51,12 @@ WORKDIR /root/openfhe-numpy-packager
 RUN sed -i '/^OS_NAME=/c\OS_NAME=Ubuntu' /root/openfhe-numpy-packager/ci-vars.sh
 RUN sed -i '/^OS_RELEASE=/c\OS_RELEASE=22.04' /root/openfhe-numpy-packager/ci-vars.sh
 # other ci-vars.sh overrides
-RUN sed -i '/^OPENFHE_TAG=/c\OPENFHE_TAG='${OPENFHE_TAG_ARG} /root/openfhe-numpy-packager/ci-vars.sh &&       \
-    sed -i '/^OPENFHE_PYTHON_TAG=/c\OPENFHE_PYTHON_TAG='${OPENFHE_PYTHON_TAG_ARG} /root/openfhe-numpy-packager/ci-vars.sh &&       \
+RUN sed -i '/^OPENFHE_TAG=/c\OPENFHE_TAG='${OPENFHE_TAG_ARG} /root/openfhe-numpy-packager/ci-vars.sh &&                         \
+    sed -i '/^OPENFHE_PYTHON_TAG=/c\OPENFHE_PYTHON_TAG='${OPENFHE_PYTHON_TAG_ARG} /root/openfhe-numpy-packager/ci-vars.sh &&    \
     sed -i '/^OPENFHE_NUMPY_TAG=/c\OPENFHE_NUMPY_TAG='${OPENFHE_NUMPY_TAG_ARG} /root/openfhe-numpy-packager/ci-vars.sh &&       \
     sed -i '/^WHEEL_MINOR_VERSION=/c\WHEEL_MINOR_VERSION='${WHEEL_MINOR_VERSION_ARG} /root/openfhe-numpy-packager/ci-vars.sh && \
     sed -i '/^WHEEL_TEST_VERSION=/c\WHEEL_TEST_VERSION='${WHEEL_TEST_VERSION_ARG} /root/openfhe-numpy-packager/ci-vars.sh &&    \
+    sed -i '/^ADDL_CMAKE_FLAGS=/c\ADDL_CMAKE_FLAGS='${ADDL_CMAKE_FLAGS_ARG} /root/openfhe-numpy-packager/ci-vars.sh &&          \
     sed -i '/^PARALELLISM=/c\PARALELLISM='${PARALELLISM_ARG} /root/openfhe-numpy-packager/ci-vars.sh
 
 # build the wheel
