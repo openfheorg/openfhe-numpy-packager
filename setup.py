@@ -31,7 +31,7 @@ ci_vars = get_ci_vars(filepath)
 ###
 get_version = (
     'bash -c "source ./scripts/common-functions.sh && get_wheel_version \\"{}\\" \\"{}\\" \\"{}\\" \\"{}\\""'
-).format(ci_vars["OS_RELEASE"], ci_vars["OPENFHE_NUMPY_TAG"], ci_vars["WHEEL_MINOR_VERSION"], ci_vars["WHEEL_TEST_VERSION"])
+).format(ci_vars["OS_RELEASE"], ci_vars["OPENFHE_PYTHON_TAG"], ci_vars["WHEEL_MINOR_VERSION"], ci_vars["WHEEL_TEST_VERSION"])
 
 get_long_descr = (
     'bash -c "source ./scripts/common-functions.sh && get_long_description \\"{}\\" \\"{}\\""'
