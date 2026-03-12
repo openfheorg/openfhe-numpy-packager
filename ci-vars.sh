@@ -1,8 +1,8 @@
 OS_NAME=Ubuntu
 OS_RELEASE=24.04
 # if you are changing OPENFHE_TAG (VERSION) here, then also adjust openfhe version in the block "install_requires" in setup.py
-OPENFHE_TAG=v1.4.2
-OPENFHE_PYTHON_TAG=v1.4.2.0
+OPENFHE_TAG=v1.5.0
+OPENFHE_PYTHON_TAG=v1.5.0.0
 OPENFHE_NUMPY_TAG=44-documentation-generation
 # subsequent release number for the given OPENFHE_NUMPY_TAG.
 WHEEL_MINOR_VERSION=0
